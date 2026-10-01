@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Beach House / 54 Images</title>
+  <meta name="description" content="Fifty-four memory cards inspired by the songs of Beach House. No rules. Draw one while listening." />
+  <meta name="theme-color" content="#d8d2c8" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 40'><rect x='1' y='1' width='30' height='38' rx='4' fill='%23111'/><circle cx='16' cy='20' r='5' fill='none' stroke='%23d9cfbf' stroke-width='1.2'/></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Nothing+You+Could+Do&display=swap" rel="stylesheet" />
+  <link rel="preload" as="image" href="images/back.webp" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-view="intro">
+  <canvas id="light" aria-hidden="true"></canvas>
+  <div class="velvet" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- Intro: the box -->
+  <section id="intro" aria-label="Beach House / 54 Images">
+    <div class="box" id="box">
+      <div class="box-base">
+        <div class="box-well">
+          <div class="deck-top" style="--count: 8">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <div class="deck-face"><img src="images/back.webp" alt="" /><span class="holo"></span></div>
+          </div>
+          <button class="box-note" id="box-note" aria-label="Read the note left in the box"><span>for you</span></button>
+        </div>
+      </div>
+      <button class="box-lid" id="lid" aria-label="Open the box">
+        <span class="mark">Beach House<br /><span class="slash">/</span><br />54 Images</span>
+      </button>
+    </div>
+    <p class="intro-hint" id="intro-hint">Open the box</p>
+    <button class="intro-draw" id="intro-draw" hidden>Draw the first card</button>
+  </section>
+
+  <!-- Header -->
+  <header class="top">
+    <a class="wordmark" href="#/" aria-label="Back to the box">Beach House <span>/</span> 54 Images</a>
+    <nav class="views">
+      <a href="#/card" data-nav="table">Table</a>
+      <a href="#/reading" data-nav="reading">Reading</a>
+      <a href="#/spread" data-nav="spread">Spread</a>
+      <button id="about-open" type="button">About</button>
+    </nav>
+  </header>
+
+  <!-- Table: one card at a time -->
+  <main id="table" aria-live="polite">
+    <button class="deck" id="deck" aria-label="Draw a random card">
+      <span class="deck-stack"><i></i><i></i><i></i><i></i><i></i></span>
+      <span class="deck-face"><img src="images/back.webp" alt="" /><span class="holo"></span></span>
+      <span class="deck-label">Draw</span>
+    </button>
+
+    <div class="stage">
+      <button class="side prev" id="prev" aria-label="Previous card"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <button class="side next" id="next" aria-label="Next card"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+      <div class="card" id="card" tabindex="0" role="button" aria-label="Flip card">
+        <div class="card-inner">
+          <div class="face back"><img src="images/back.webp" alt="" /><span class="holo"></span><span class="glare"></span>
+            <div class="back-note" id="back-note" aria-live="polite"><span class="bn-num" id="bn-num"></span><p id="bn-text"></p></div>
+          </div>
+          <div class="face front"><img id="card-img" alt="" /><span class="glare"></span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="caption" id="caption">
+      <span class="num" id="cap-num"></span>
+      <h1 class="title" id="cap-title"></h1>
+      <span class="meta" id="cap-meta"></span>
+      <button class="turn" id="turn" type="button">Turn it over</button>
+    </div>
+
+    <div class="controls">
+      <button id="draw" class="draw-btn">Draw at random</button>
+    </div>
+  </main>
+
+  <!-- Reading: three cards, played in order -->
+  <section id="reading" aria-label="A three-card reading">
+    <div class="reading-cards" id="reading-cards"></div>
+    <div class="reading-bar">
+      <button id="redraw">Draw another reading</button>
+      <button id="share-reading">Share this reading</button>
+    </div>
+  </section>
+
+  <!-- Spread: all 54, arrange freely -->
+  <section id="spread" aria-label="All 54 cards">
+    <div class="spread-bar">
+      <p>Drag to arrange. Tap to draw. <span class="count" id="count"></span></p>
+      <button id="by-album">By album</button>
+      <button id="gather">Gather</button>
+      <button id="scatter">Scatter</button>
+    </div>
+    <div class="spread-table" id="spread-table"></div>
+  </section>
+
+  <!-- Player -->
+  <div class="player" id="player" aria-label="Spotify player">
+    <div id="embed"></div>
+    <div class="player-meta">
+      <span class="player-toggles">
+        <button id="sound" aria-pressed="true">Sound on</button>
+        <button id="play-on" aria-pressed="true" title="When a song ends, deal the next card">Play the deck</button>
+      </span>
+      <a id="open-spotify" target="_blank" rel="noopener">Open in Spotify ↗</a>
+    </div>
+  </div>
+
+  <!-- The letter left in the box -->
+  <dialog id="letter" aria-label="A letter">
+    <div class="sheet" id="sheet">
+      <div class="letter-text">
+        <p>Dear Victoria, dear Alex,<br />and whoever else opened this box,</p>
+        <p>in October 2006 a quiet, hazy record came out of Baltimore, and it has been playing somewhere in my life ever since.</p>
+        <p>These are fifty-four cards, one for each song that stayed. They aren&rsquo;t illustrations. They&rsquo;re what I saw with my eyes closed: a pool that turned into the sea, a night bus going through space, a house where the sun only reaches the toys.</p>
+        <p>There are no rules. Draw one while you listen. Lay three in a row and see what they say. Leave them face-down for a while.</p>
+        <p>Thank you for the songs.</p>
+        <p class="sign">with love,<br />a listener</p>
+      </div>
+    </div>
+    <button class="letter-close" id="letter-close">Put it back</button>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" hidden>
+    <p id="toast-text"></p>
+    <button id="toast-action"></button>
+  </div>
+
+  <!-- About -->
+  <dialog id="about">
+    <div class="about-inner">
+      <p class="mark small">Beach House<br /><span class="slash">/</span><br />54 Images</p>
+      <p>Fifty-four oversized cards, one for each song. Each holds a single strange fragment: memory, repetition, disappearing things, light, photographs, movement, time.</p>
+      <p>There are no rules printed on the cards. Arrange them. Frame them. Draw one while listening. Use them as prompts.</p>
+      <p class="keys"><kbd>←</kbd> <kbd>→</kbd> move through the deck · <kbd>D</kbd> draw · <kbd>Space</kbd> flip · <kbd>R</kbd> reading · <kbd>S</kbd> spread</p>
+      <p class="fine">An unofficial fan project, not affiliated with Beach House or Sub Pop. Images were generated with AI from prompts written in response to the songs. Music plays through Spotify; log in to Spotify in this browser to hear full tracks instead of previews.</p>
+      <button id="about-close">Close</button>
+    </div>
+  </dialog>
+
+  <script>
+    // The Spotify API script is async and may load before app.js; park the API until the app asks for it.
+    window.onSpotifyIframeApiReady = (api) => { window.__spotifyApi = api; dispatchEvent(new Event("spotify-ready")); };
+  </script>
+  <script src="caustics.js"></script>
+  <script src="app.js" type="module"></script>
+  <script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
+</body>
+</html>
