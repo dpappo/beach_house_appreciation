@@ -1,0 +1,13 @@
+{
+  "name": "beach-house-54-images",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "serve": "python3 scripts/serve.py",
+    "screenshots": "node scripts/screenshots.mjs",
+    "postinstall": "git config core.hooksPath .githooks || true"
+  },
+  "devDependencies": {
+    "playwright": "^1.63.0"
+  }
+}

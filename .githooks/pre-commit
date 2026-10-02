@@ -1,0 +1,24 @@
+#!/bin/sh
+# Refreshes the README screenshots (docs/screenshots/) whenever a commit touches the site,
+# and adds them to that same commit, so whatever you push always shows the current app.
+# Skip once with:  SKIP_SCREENSHOTS=1 git commit ...
+# Enabled by `npm install` (it sets core.hooksPath to .githooks).
+
+[ -n "$SKIP_SCREENSHOTS" ] && exit 0
+
+# Only when something the screenshots show is part of this commit
+git diff --cached --name-only | grep -qE '^(index\.html|app\.js|caustics\.js|styles\.css|data/(cards|palettes)\.json|images/|scripts/screenshots\.mjs)' || exit 0
+
+if [ ! -d node_modules/playwright ]; then
+  echo "pre-commit: skipping screenshots (run 'npm install' to enable them)" >&2
+  exit 0
+fi
+
+echo "pre-commit: refreshing README screenshots…" >&2
+# A failed capture never blocks the commit; the old screenshots just stay.
+if node scripts/screenshots.mjs >&2; then
+  git add docs/screenshots
+else
+  echo "pre-commit: screenshot capture failed, committing without new screenshots" >&2
+fi
+exit 0
